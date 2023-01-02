@@ -9,7 +9,7 @@
 START_TIME=$(date +%F__%T | sed 's/:/-/g')
 DOWNLOAD_URL='https://updates.jenkins-ci.org/download/plugins'  # do not end it with slash
 DESTINATION_DIR="plugins_${START_TIME}"                         # do not end it with slash
-PLUGIN_LIST='jenkins-plugin-list_2023-01-02__11-18-13.csv'
+PLUGIN_LIST='jenkins-plugin-list'
 LOG_FILE="jenkins_plugin_list_${START_TIME}.log"
 
 if ! [ -f "${PLUGIN_LIST}" ]
@@ -32,6 +32,7 @@ cat "${PLUGIN_LIST}" | while read plugin
 do
     pluginName=$(echo $plugin | gawk --field-separator ',' '{print $1}')
     pluginVer=$(echo $plugin | gawk --field-separator ',' '{print $2}')
+    # The script sends more verbose messages to a log file rather than to StdOut 
     echo '------------------------------------------------------------' >> "${LOG_FILE}" 
     echo -e -n "  Downloading $pluginName $pluginVer ...... " | tee --append "${LOG_FILE}" 
     echo -e '\n------------------------------------------------------------' >> "${LOG_FILE}" 
